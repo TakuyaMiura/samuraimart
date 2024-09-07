@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   }
 
   devise_scope :user do
-    root :to => "users/sessions#new"
+    root :to => "web#index"
     get "signup", :to => "users/registrations#new"
     get "verify", :to => "users/registrations#verify"
     get "login", :to => "users/sessions#new"
@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     collection do
       get "cart", :to => "shopping_carts#index"
       post "cart/create", :to => "shopping_carts#create"
+      patch "cart/update_quantity", :to => "shopping_carts#update_quantity"
+      delete "cart/remove_item", :to => "shopping_carts#remove_item"
       delete "cart", :to => "shopping_carts#destroy"
       get "mypage", :to => "users#mypage"
       get "mypage/edit", :to => "users#edit"
@@ -33,6 +35,7 @@ Rails.application.routes.draw do
   resources :products do
     member do
       get :favorite
+      get :unlike
     end
     resources :reviews, only: [:create]
   end

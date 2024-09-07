@@ -13,9 +13,14 @@ class Product < ApplicationRecord
     display_list(page)
   }
   scope :sort_products, -> (sort_order, page) {
-    on_category(sort_order[:sort_category]).
-    sort_order(sort_order[:sort]).
-    display_list(page)
+    if sort_order[:sort_category].present?
+      on_category(sort_order[:sort_category]).
+      sort_order(sort_order[:sort]).
+      display_list(page)
+    else
+      sort_order(sort_order[:sort]).
+      display_list(page)
+    end
   }
 
   scope :sort_list, -> {
@@ -24,7 +29,8 @@ class Product < ApplicationRecord
       "価格の安い順" => "price asc",
       "価格の高い順" => "price desc", 
       "出品の古い順" => "updated_at asc", 
-      "出品の新しい順" => "updated_at desc"
+      "出品の新しい順" => "updated_at desc",
+      "五十音順" => "name asc",
     }
   }
 

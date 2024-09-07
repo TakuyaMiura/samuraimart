@@ -2,12 +2,14 @@
   <div class="w-75">
     <h1>ショッピングカート</h1>
 
-    <div class="offset-8 col-4">
+    <div class="offset-6 col-12">
       <div class="row">
-        <div class="col-6">
+        <div class="col-2">
+        </div>
+        <div class="col-2">
           <h2>数量</h2>
         </div>
-        <div class="col-6">
+        <div class="col-2">
           <h2>小計</h2>
         </div>
       </div>
@@ -23,11 +25,19 @@
               <%= image_tag "/images/dummy.png", class: "img-fuild w-100" %>
           <% end %>
         </div>
-        <div class="col-md-6 mt-4">
+        <div class="col-md-4 mt-2">
           <h3 class="mt-4"><%= product.name %></h3>
         </div>
         <div class="col-md-2">
-          <h3 class="w-100 mt-4"><%= user_cart_item.quantity %></h3>
+          <%= link_to cart_remove_item_users_path(product_id: user_cart_item.item_id), method: :delete, class: "samuraimart-favorite-item-delete" do %>
+            削除
+          <% end %>
+        </div>
+        <div class="col-md-2">
+          <%= form_with url: cart_update_quantity_users_path, method: :patch, local: true do |f| %>
+            <%= f.hidden_field :product_id, value: user_cart_item.item_id %>
+            <%= f.number_field :quantity, min: 1, value: user_cart_item.quantity, class: "form-control w-50", onChange: "javascript: this.form.submit();" %>
+          <% end %>
         </div>
         <div class="col-md-2">
           <h3 class="w-100 mt-4">￥<%= user_cart_item.price_cents * user_cart_item.quantity %></h3>

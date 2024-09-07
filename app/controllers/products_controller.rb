@@ -1,10 +1,10 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :favorite]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :favorite, :unlike]
 
   def index
     if sort_params.present?
       @sorted = sort_params[:sort]
-      @category = Category.request_category(sort_params[:sort_category])
+      @category = Category.request_category(sort_params[:sort_category]) if sort_params[:sort_category].present?
       @products = Product.sort_products(sort_params, params[:page])
     elsif params[:category].present?
       @category = Category.request_category(params[:category])
@@ -51,6 +51,11 @@ class ProductsController < ApplicationController
   def favorite
     current_user.toggle_like!(@product)
     redirect_to product_url @product
+  end
+
+  def unlike
+    current_user.unlike!(@product)
+    redirect_to mypage_favorite_users_path
   end
 
   private
